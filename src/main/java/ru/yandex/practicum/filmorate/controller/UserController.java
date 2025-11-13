@@ -7,43 +7,50 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/films")
-public class FilmController {
-
-    private final Map<Long, Film> films = new HashMap<>();
+@RequestMapping("/users")
+public class UserController {
+    private final Map<Long, User> users = new HashMap<>();
 
     @GetMapping
-    public Collection<Film> getAll() {
-        return films.values();
+    public Collection<User> getAll() {
+        return users.values();
     }
 
     @PostMapping
-    public Film add(@Valid @RequestBody Film film) {
-        film.setId(getNextId());
-        films.put(film.getId(), film);
-        return film;
+    public User add(@Valid @RequestBody User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+        user.setId(getNextId());
+        users.put(user.getId(), user);
+        return user;
     }
 
     @PutMapping
-    public Film update(@Valid @RequestBody Film newFilm) {
-        if (newFilm.getId() == null) {
+    public User update(@Valid @RequestBody User newUser) {
+        if (newUser.getId() == null) {
             throw new ConditionsNotMetException("Id должен быть указан", "id");
         }
-        if (films.containsKey(newFilm.getId())) {
-            Film oldFilm = films.get(newFilm.getId());
-            oldFilm.setName(newFilm.getName());
-            oldFilm.setDescription(newFilm.getDescription());
-            oldFilm.setReleaseDate(newFilm.getReleaseDate());
-            oldFilm.setDuration(newFilm.getDuration());
-            return oldFilm;
+        if (users.containsKey(newUser.getId())) {
+            User oldUser = users.get(newUser.getId());
+            oldUser.setEmail(newUser.getEmail());
+            oldUser.setLogin(newUser.getLogin());
+            if (newUser.getName() == null) {
+                oldUser.setName(newUser.getLogin());
+            } else {
+                oldUser.setName(newUser.getName());
+            }
+            oldUser.setBirthday(newUser.getBirthday());
+            return oldUser;
         }
-        throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден", "id");
+        throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден", "id");
     }
 
     @ExceptionHandler({
@@ -73,9 +80,8 @@ public class FilmController {
         return errors;
     }
 
-
     private Long getNextId() {
-        Long maxId = films.keySet().stream()
+        Long maxId = users.keySet().stream()
                 .mapToLong(id -> id)
                 .max()
                 .orElse(0);

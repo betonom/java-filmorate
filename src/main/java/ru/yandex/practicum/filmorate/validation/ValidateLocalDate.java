@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = LocalDateValidator.class)
 public @interface ValidateLocalDate {
-    String message() default "Дата релиза не может быть раньше 28 декабря 1895 года";
+    String message() default "Дата релиза не может быть раньше 28 декабря 1895 года или null";
 
     Class<?>[] groups() default {};
 

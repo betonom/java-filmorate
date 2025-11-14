@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +62,7 @@ public class FilmController {
             MethodArgumentNotValidException.class,
             ConditionsNotMetException.class,
             NotFoundException.class})
-    public Map<String, String> handleMethodArgumentNotValidException(Exception ex) {
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(Exception ex) {
         Map<String, String> errors = new HashMap<>();
 
         if (ex.getClass().equals(MethodArgumentNotValidException.class)) {
@@ -71,19 +73,22 @@ public class FilmController {
                 errors.put(fieldName, errorMessage);
             });
             log.warn("MethodArgumentNotValidException on handle /films");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
         if (ex.getClass().equals(ConditionsNotMetException.class)) {
             ConditionsNotMetException e = (ConditionsNotMetException) ex;
             errors.put(e.getFieldName(), e.getMessage());
             log.warn("ConditionsNotMetException on handle /films");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
         if (ex.getClass().equals(NotFoundException.class)) {
             NotFoundException e = (NotFoundException) ex;
             errors.put(e.getFieldName(), e.getMessage());
             log.warn("NotFoundException on handle /films");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
         }
 
-        return errors;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }
 
 

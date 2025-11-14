@@ -45,7 +45,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на email format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Имейл не может быть пустой и должен содержать символ @") ,
+                messages.contains("Имейл не может быть пустой и должен содержать символ @"),
                 "Валидация на email format проходит неверно");
     }
 
@@ -58,7 +58,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры") ,
+                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
                 "Валидация на login format проходит неверно");
 
         ////////
@@ -70,7 +70,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры") ,
+                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
                 "Валидация на login format проходит неверно");
 
         ////////
@@ -82,7 +82,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры") ,
+                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
                 "Валидация на login format проходит неверно");
 
         ////////
@@ -94,7 +94,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры") ,
+                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
                 "Валидация на login format проходит неверно");
     }
 
@@ -107,7 +107,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на birthday past проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("День рождения не может быть в будущем") ,
+                messages.contains("День рождения не может быть в будущем"),
                 "Валидация на birthday past проходит неверно");
     }
 

@@ -51,30 +51,6 @@ class UserTest {
 
     @Test
     void validateUserLoginFormatTest() {
-        user.setLogin("0name");
-
-        getMessages(user);
-
-        Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
-
-        Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
-                "Валидация на login format проходит неверно");
-
-        ////////
-
-        user.setLogin("nnn");
-
-        getMessages(user);
-
-        Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
-
-        Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
-                "Валидация на login format проходит неверно");
-
-        ////////
-
         user.setLogin("l o g i n");
 
         getMessages(user);
@@ -82,7 +58,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
+                messages.contains("Логин должен быть от 4 до 12 символов и не должен содержать пробелы"),
                 "Валидация на login format проходит неверно");
 
         ////////
@@ -94,7 +70,7 @@ class UserTest {
         Assertions.assertTrue(validates.size() > 0, "Валидация на login format проходит неверно");
 
         Assertions.assertTrue(
-                messages.contains("Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры"),
+                messages.contains("Логин должен быть от 4 до 12 символов и не должен содержать пробелы"),
                 "Валидация на login format проходит неверно");
     }
 

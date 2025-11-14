@@ -14,7 +14,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Логин не может быть пустой или null")
-    @Pattern(regexp = "^[^0-9][a-zA-Z0-9]{3,11}$",
+    @Pattern(regexp = "^[a-zA-Z0-9]$",
             message = "Логин должен быть от 4 до 12 символов, не должен содержать пробелы и начинаться с цифры")
     private String login;
 

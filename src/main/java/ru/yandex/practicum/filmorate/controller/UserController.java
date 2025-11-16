@@ -2,10 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -42,7 +38,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@Valid @RequestBody User newUser) {
+    public User update(@RequestBody User newUser) {
         log.info("Start handling request with PUT method for /users");
 
         if (newUser.getId() == null) {
@@ -51,50 +47,22 @@ public class UserController {
         if (users.containsKey(newUser.getId())) {
             log.trace("Updating old user object's fields");
             User oldUser = users.get(newUser.getId());
-            oldUser.setEmail(newUser.getEmail());
-            oldUser.setLogin(newUser.getLogin());
-            if (newUser.getName() == null) {
-                oldUser.setName(newUser.getLogin());
-            } else {
+
+            if (newUser.getEmail() != null)
+                oldUser.setEmail(newUser.getEmail());
+
+            if (newUser.getLogin() != null)
+                oldUser.setLogin(newUser.getLogin());
+
+            if (newUser.getName() != null)
                 oldUser.setName(newUser.getName());
-            }
-            oldUser.setBirthday(newUser.getBirthday());
+
+            if (newUser.getBirthday() != null)
+                oldUser.setBirthday(newUser.getBirthday());
+
             return oldUser;
         }
         throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден", "id");
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({
-            MethodArgumentNotValidException.class,
-            ConditionsNotMetException.class,
-            NotFoundException.class})
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(Exception ex) {
-        Map<String, String> errors = new HashMap<>();
-
-        if (ex.getClass().equals(MethodArgumentNotValidException.class)) {
-            MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
-            e.getBindingResult().getAllErrors().forEach(error -> {
-                String fieldName = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-            log.warn("MethodArgumentNotValidException on handle /users");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-        }
-        if (ex.getClass().equals(ConditionsNotMetException.class)) {
-            ConditionsNotMetException e = (ConditionsNotMetException) ex;
-            errors.put(e.getFieldName(), e.getMessage());
-            log.warn("ConditionsNotMetException on handle /users");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-        }
-        if (ex.getClass().equals(NotFoundException.class)) {
-            NotFoundException e = (NotFoundException) ex;
-            errors.put(e.getFieldName(), e.getMessage());
-            log.warn("NotFoundException on handle /users");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }
 
     private Long getNextId() {

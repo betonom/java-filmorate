@@ -2,10 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -40,7 +36,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@Valid @RequestBody Film newFilm) {
+    public Film update(@RequestBody Film newFilm) {
         log.info("Start handling request with PUT method for /films");
 
         if (newFilm.getId() == null) {
@@ -49,48 +45,22 @@ public class FilmController {
         if (films.containsKey(newFilm.getId())) {
             log.trace("Updating old film object's fields");
             Film oldFilm = films.get(newFilm.getId());
-            oldFilm.setName(newFilm.getName());
-            oldFilm.setDescription(newFilm.getDescription());
-            oldFilm.setReleaseDate(newFilm.getReleaseDate());
-            oldFilm.setDuration(newFilm.getDuration());
+            if (newFilm.getName() != null)
+                oldFilm.setName(newFilm.getName());
+
+            if (newFilm.getDescription() != null)
+                oldFilm.setDescription(newFilm.getDescription());
+
+            if (newFilm.getReleaseDate() != null)
+                oldFilm.setReleaseDate(newFilm.getReleaseDate());
+
+            if (newFilm.getDuration() != null)
+                oldFilm.setDuration(newFilm.getDuration());
+
             return oldFilm;
         }
         throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден", "id");
     }
-
-    @ExceptionHandler({
-            MethodArgumentNotValidException.class,
-            ConditionsNotMetException.class,
-            NotFoundException.class})
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(Exception ex) {
-        Map<String, String> errors = new HashMap<>();
-
-        if (ex.getClass().equals(MethodArgumentNotValidException.class)) {
-            MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
-            e.getBindingResult().getAllErrors().forEach(error -> {
-                String fieldName = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-            log.warn("MethodArgumentNotValidException on handle /films");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-        }
-        if (ex.getClass().equals(ConditionsNotMetException.class)) {
-            ConditionsNotMetException e = (ConditionsNotMetException) ex;
-            errors.put(e.getFieldName(), e.getMessage());
-            log.warn("ConditionsNotMetException on handle /films");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-        }
-        if (ex.getClass().equals(NotFoundException.class)) {
-            NotFoundException e = (NotFoundException) ex;
-            errors.put(e.getFieldName(), e.getMessage());
-            log.warn("NotFoundException on handle /films");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
-        }
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
-    }
-
 
     private Long getNextId() {
         log.trace("Getting next id for object film");

@@ -8,9 +8,9 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class ValidationErrorResponse {
+public class ErrorResponse {
 
-    private final List<ValidationError> validationErrors;
+    private final List<Error> errors;
 
 }
 

@@ -14,35 +14,32 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ErrorHandlerControllerAdvice {
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ValidationErrorResponse handleMethodArgumentsNotValidException(MethodArgumentNotValidException e) {
+    public ErrorResponse handleMethodArgumentsNotValidException(MethodArgumentNotValidException e) {
         log.warn(e.getMessage(), e);
-        return new ValidationErrorResponse(
+        return new ErrorResponse(
                 e.getBindingResult().getFieldErrors().stream()
-                        .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
+                        .map(error -> new Error(error.getField(), error.getDefaultMessage()))
                         .collect(Collectors.toList())
         );
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConditionsNotMetException.class)
-    public ValidationErrorResponse handleConditionsNotMetException(ConditionsNotMetException e) {
+    public ErrorResponse handleConditionsNotMetException(ConditionsNotMetException e) {
         log.warn(e.getMessage(), e);
-        return new ValidationErrorResponse(
-                List.of(new ValidationError(e.getFieldName(), e.getMessage()))
+        return new ErrorResponse(
+                List.of(new Error(e.getFieldName(), e.getMessage()))
         );
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ValidationErrorResponse handleNotFoundException(NotFoundException e) {
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
         log.warn(e.getMessage(), e);
-        return new ValidationErrorResponse(
-                List.of(new ValidationError(e.getFieldName(), e.getMessage()))
+        return new ErrorResponse(
+                List.of(new Error(e.getFieldName(), e.getMessage()))
         );
     }
 }

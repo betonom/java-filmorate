@@ -73,20 +73,16 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<String> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+    public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         log.info("Start handling request with PUT method for /users/{id}/friends/{friendId}");
 
         userService.addFriend(id, friendId);
-
-        return new ResponseEntity<>("Друг успешно добавлен!", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<String> deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
+    public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
         log.info("Start handling request with DELETE method for /users/{id}/friends/{friendId}");
 
         userService.deleteFriend(id, friendId);
-
-        return new ResponseEntity<>("Друг успешно удален!", HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -25,6 +26,14 @@ public class FilmService {
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
 
+        if (film == null) {
+            throw new NotFoundException("error", "Фильм с id " + filmId + "не найден");
+        }
+
+        if (user == null) {
+            throw new NotFoundException("error", "Пользователь с id " + userId + "не найден");
+        }
+
         if (!film.getLikes().contains(user.getId())) {
             film.getLikes().add(user.getId());
         }
@@ -34,30 +43,42 @@ public class FilmService {
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
 
+        if (film == null) {
+            throw new NotFoundException("error", "Фильм с id " + filmId + "не найден");
+        }
+
+        if (user == null) {
+            throw new NotFoundException("error", "Пользователь с id " + userId + "не найден");
+        }
+
         if (film.getLikes().contains(user.getId())) {
             film.getLikes().remove(user.getId());
         }
     }
 
     public List<Film> getTopFilms(int count) {
+        System.out.println();
+        System.out.println(count);
+        System.out.println();
+        System.out.println();
         ArrayList<Film> films = filmStorage.getFilms();
         films.sort((Film film1, Film film2) -> {
             if (film1.getLikes().size() > film2.getLikes().size()) {
-                return 1;
-            } else if ((film1.getLikes().size() < film2.getLikes().size())) {
                 return -1;
+            } else if ((film1.getLikes().size() < film2.getLikes().size())) {
+                return 1;
             } else {
                 return 0;
             }
         });
 
-        ArrayList<Film> topTenFilms = new ArrayList<>(count);
+        ArrayList<Film> topFilms = new ArrayList<>(count);
 
         if (films.size() < count) {
-            topTenFilms.addAll(films);
+            topFilms.addAll(films);
         } else {
-            topTenFilms.addAll(films.size() - count, films);
+            topFilms.addAll(films.subList(0, count));
         }
-        return topTenFilms;
+        return topFilms;
     }
 }

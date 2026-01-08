@@ -56,20 +56,16 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public ResponseEntity<String> addLike(@PathVariable Long id, @PathVariable Long userId) {
+    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
         log.info("Start handling request with PUT method for /films/{id}/like/{userId}");
 
         filmService.addLike(id, userId);
-
-        return new ResponseEntity<>("Лайк успешно поставлен!", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public ResponseEntity<String> deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
         log.info("Start handling request with DELETE method for /films/{id}/like/{userId}");
 
         filmService.deleteLike(id, userId);
-
-        return new ResponseEntity<>("Лайк успешно удален!", HttpStatus.OK);
     }
 }

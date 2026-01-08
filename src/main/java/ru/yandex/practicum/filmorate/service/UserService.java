@@ -1,4 +1,4 @@
- package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,8 @@ public class UserService {
     }
 
     public void addFriend(Long userMainId, Long userFriendId) {
-        User userMain =  userStorage.getUserById(userMainId);
-        User userFriend =  userStorage.getUserById(userFriendId);
+        User userMain = userStorage.getUserById(userMainId);
+        User userFriend = userStorage.getUserById(userFriendId);
 
         if (userMain == null) {
             throw new NotFoundException("error", "Пользователь с id " + userMainId + "не найден");
@@ -52,8 +52,8 @@ public class UserService {
     }
 
     public void deleteFriend(Long userMainId, Long userFriendId) {
-        User userMain =  userStorage.getUserById(userMainId);
-        User userFriend =  userStorage.getUserById(userFriendId);
+        User userMain = userStorage.getUserById(userMainId);
+        User userFriend = userStorage.getUserById(userFriendId);
 
         if (userMain == null) {
             throw new NotFoundException("error", "Пользователь с id " + userMainId + "не найден");

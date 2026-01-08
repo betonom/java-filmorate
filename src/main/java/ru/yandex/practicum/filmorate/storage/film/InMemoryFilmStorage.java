@@ -22,6 +22,11 @@ public class InMemoryFilmStorage implements FilmStorage{
     }
 
     @Override
+    public Film getFilmById(Long id) {
+        return films.get(id);
+    }
+
+    @Override
     public Film add(Film film) {
         film.setId(getNextId());
         log.trace("Put film into hashMap films");

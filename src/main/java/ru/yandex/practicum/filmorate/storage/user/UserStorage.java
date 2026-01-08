@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public interface UserStorage {
     ArrayList<User> getUsers();
 
+    User getUserById(Long id);
+
     User add(User user);
 
     User update(User newUser);

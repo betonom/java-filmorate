@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public interface FilmStorage {
     ArrayList<Film> getFilms();
 
+    Film getFilmById(Long id);
+
     Film add(Film film);
 
     Film update(Film newFilm);

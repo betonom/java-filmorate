@@ -20,14 +20,16 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public List<Long> getFriends(Long userMainId) {
+    public List<User> getFriends(Long userMainId) {
         User userMain = userStorage.getUserById(userMainId);
 
         if (userMain == null) {
             throw new NotFoundException("error", "Пользователь с id " + userMainId + "не найден");
         }
 
-        return new ArrayList<>(userMain.getFriends());
+        return userMain.getFriends().stream()
+                .map(friendId -> userStorage.getUserById(friendId))
+                .collect(Collectors.toList());
     }
 
     public void addFriend(Long userMainId, Long userFriendId) {
@@ -42,13 +44,9 @@ public class UserService {
             throw new NotFoundException("error", "Пользователь с id " + userFriendId + "не найден");
         }
 
-        if (userMain.getFriends().contains(userFriendId) || userFriend.getFriends().contains(userMainId)) {
-            return;
-        }
+        userMain.getFriends().add(userFriendId);
 
-        userMain.getFriends().add(userFriend.getId());
-
-        userFriend.getFriends().add(userMain.getId());
+        userFriend.getFriends().add(userMainId);
     }
 
     public void deleteFriend(Long userMainId, Long userFriendId) {
@@ -73,7 +71,7 @@ public class UserService {
         }
     }
 
-    public List<Long> getCommonFriends(Long userMainId, Long userFriendId) {
+    public List<User> getCommonFriends(Long userMainId, Long userFriendId) {
         User userMain = userStorage.getUserById(userMainId);
         User userFriend = userStorage.getUserById(userFriendId);
 
@@ -87,6 +85,7 @@ public class UserService {
 
         return userMain.getFriends().stream()
                 .filter(userId -> userFriend.getFriends().contains(userId))
+                .map(userId -> userStorage.getUserById(userId))
                 .collect(Collectors.toList());
     }
 }

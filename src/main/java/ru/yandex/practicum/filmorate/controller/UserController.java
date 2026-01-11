@@ -39,14 +39,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    public List<Long> getFriends(@PathVariable Long id) {
+    public List<User> getFriends(@PathVariable Long id) {
         log.info("Start handling request with GET method for /users/{id}/friends");
 
         return userService.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<Long> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         log.info("Start handling request with GET method for /users/{id}/friends/common/{otherId}");
 
         return userService.getCommonFriends(id, otherId);

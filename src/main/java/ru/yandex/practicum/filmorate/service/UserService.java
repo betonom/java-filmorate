@@ -19,6 +19,14 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
+    public List<User> getUsers() {
+        return userStorage.getUsers();
+    }
+
+    public User getUserById(Long id) {
+        return userStorage.getUserById(id);
+    }
+
     public List<User> getFriends(Long userMainId) {
         User userMain = userStorage.getUserById(userMainId);
 
@@ -29,6 +37,14 @@ public class UserService {
         return userMain.getFriends().stream()
                 .map(friendId -> userStorage.getUserById(friendId))
                 .collect(Collectors.toList());
+    }
+
+    public User add(User user) {
+        return userStorage.add(user);
+    }
+
+    public User update(User newUser) {
+        return userStorage.update(newUser);
     }
 
     public void addFriend(Long userMainId, Long userFriendId) {

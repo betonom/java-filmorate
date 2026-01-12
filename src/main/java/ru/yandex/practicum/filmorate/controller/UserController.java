@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,30 +13,24 @@ import java.util.Collection;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserStorage userStorage;
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserStorage userStorage, UserService userService) {
-        this.userStorage = userStorage;
-        this.userService = userService;
-    }
 
     @GetMapping
     public Collection<User> getAll() {
         log.info("Start handling request with GET method for /users");
 
-        return userStorage.getUsers();
+        return userService.getUsers();
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         log.info("Start handling request with GET method for /users/{id}");
 
-        return userStorage.getUserById(id);
+        return userService.getUserById(id);
     }
 
     @GetMapping("/{id}/friends")
@@ -56,14 +51,14 @@ public class UserController {
     public User add(@Valid @RequestBody User user) {
         log.info("Start handling request with POST method for /users");
 
-        return userStorage.add(user);
+        return userService.add(user);
     }
 
     @PutMapping
     public User update(@RequestBody User newUser) {
         log.info("Start handling request with PUT method for /users");
 
-        return userStorage.update(newUser);
+        return userService.update(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")

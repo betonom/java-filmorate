@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +13,17 @@ import java.util.Collection;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmStorage filmStorage;
     private final FilmService filmService;
-
-    @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
-        this.filmService = filmService;
-    }
 
     @GetMapping
     public Collection<Film> getAll() {
         log.info("Start handling request with GET method for /films");
 
-        return filmStorage.getFilms();
+        return filmService.getFilms();
     }
 
     @GetMapping("/popular")
@@ -42,14 +37,14 @@ public class FilmController {
     public Film add(@Valid @RequestBody Film film) {
         log.info("Start handling request with POST method for /films");
 
-        return filmStorage.add(film);
+        return filmService.add(film);
     }
 
     @PutMapping
     public Film update(@RequestBody Film newFilm) {
         log.info("Start handling request with PUT method for /films");
 
-        return filmStorage.update(newFilm);
+        return filmService.update(newFilm);
     }
 
     @PutMapping("/{id}/like/{userId}")

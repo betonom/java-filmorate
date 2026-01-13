@@ -1,73 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-
-    private final Map<Long, Film> films = new HashMap<>();
+    private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> getAll() {
         log.info("Start handling request with GET method for /films");
 
-        return films.values();
+        return filmService.getFilms();
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+        log.info("Start handling request with GET method for /films/popular");
+
+        return filmService.getTopFilms(count);
     }
 
     @PostMapping
     public Film add(@Valid @RequestBody Film film) {
         log.info("Start handling request with POST method for /films");
 
-        film.setId(getNextId());
-        log.trace("Put film into hashMap films");
-        films.put(film.getId(), film);
-        return film;
+        return filmService.add(film);
     }
 
     @PutMapping
     public Film update(@RequestBody Film newFilm) {
         log.info("Start handling request with PUT method for /films");
 
-        if (newFilm.getId() == null) {
-            throw new ConditionsNotMetException("Id должен быть указан", "id");
-        }
-        if (films.containsKey(newFilm.getId())) {
-            log.trace("Updating old film object's fields");
-            Film oldFilm = films.get(newFilm.getId());
-            if (newFilm.getName() != null)
-                oldFilm.setName(newFilm.getName());
-
-            if (newFilm.getDescription() != null)
-                oldFilm.setDescription(newFilm.getDescription());
-
-            if (newFilm.getReleaseDate() != null)
-                oldFilm.setReleaseDate(newFilm.getReleaseDate());
-
-            if (newFilm.getDuration() != null)
-                oldFilm.setDuration(newFilm.getDuration());
-
-            return oldFilm;
-        }
-        throw new NotFoundException("Фильм с id = " + newFilm.getId() + " не найден", "id");
+        return filmService.update(newFilm);
     }
 
-    private Long getNextId() {
-        log.trace("Getting next id for object film");
-        Long maxId = films.keySet().stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++maxId;
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
+        log.info("Start handling request with PUT method for /films/{id}/like/{userId}");
+
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        log.info("Start handling request with DELETE method for /films/{id}/like/{userId}");
+
+        filmService.deleteLike(id, userId);
     }
 }

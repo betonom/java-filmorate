@@ -3,14 +3,21 @@ Template repository for Filmorate project.
 
 
 Спроектированная база данных  
+
 Примеры запросов:  
-        Получение всех фильмов:    
-SELECT * FROM films  
 
-        Получение всех пользователей:  
-SELECT * FROM users  
+Получение всех фильмов:    
+```SQL
+SELECT * FROM films
+```  
 
-        Получение топа фильмов:  
+Получение всех пользователей:  
+```SQL
+SELECT * FROM users
+```  
+
+Получение топа фильмов:   
+```SQL
 SELECT f.id,  
         f.name,  
         f.desctiption,   
@@ -23,6 +30,7 @@ INNER JOIN mpa AS m ON f.ratingId = m.id
 INNER JOIN film_likes AS fl ON f.id = fl.filmId  
 GROUP BY fl.filmId   
 ORDER BY COUNT(fl.filmId) DESC   
-LIMIT 10;  
+LIMIT 10;
+```  
 
 ![FilmorateDB](./filmorateDB.png)

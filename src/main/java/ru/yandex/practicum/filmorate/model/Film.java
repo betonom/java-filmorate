@@ -5,7 +5,9 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.ValidateLocalDate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,4 +34,8 @@ public class Film {
 
     //Здесь хранятся id тех, кто поставил лайк
     private Set<Long> likes = new HashSet<>();
+
+    private List<String> genre = new ArrayList<>();
+
+    private String rating;
 }

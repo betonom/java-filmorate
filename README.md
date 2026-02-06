@@ -2,15 +2,13 @@
 Template repository for Filmorate project.
 
 
-Спроектированная база данных
-Примеры запросов:
-        Получение всех фильмов:
-SELECT * FROM films
+Спроектированная база данных  
+Примеры запросов:  
+        Получение всех фильмов:    
+SELECT * FROM films  
 
-
-        Получение всех пользователей:
-SELECT * FROM users
-
+        Получение всех пользователей:  
+SELECT * FROM users  
 
         Получение топа фильмов:  
 SELECT f.id,  
